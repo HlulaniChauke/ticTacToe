@@ -8,6 +8,7 @@ body{
     height: 100vh;
     justify-content: center;
     align-items: center;
+    gap: 15px;
 }
 
 button{
@@ -45,4 +46,10 @@ button{
 
 .nots{
     background: url(circle.svg) no-repeat center;
+}
+
+.tokenLabels{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }

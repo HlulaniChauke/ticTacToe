@@ -4,10 +4,10 @@ const displayController = {
     },
     
     gameStart: function(){
-
+        //reset everything
     },
     
-    displayWinner: function(){
+    displayMessage: function(){
 
     },
     displayToken: function(token, {a,b}){
@@ -19,6 +19,8 @@ const displayController = {
 const gameBoard ={
     boardSize: 3,
     movesMade: 0,
+    gameOver: false,
+    winner: "",
     board : [["","",""],["","",""],["","",""]],
 
     tokenPlacements : function(token, location){

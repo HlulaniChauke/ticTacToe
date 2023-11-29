@@ -15,21 +15,31 @@
     </div>
     <div class="tokens">
         <h3>Choose a token</h3>
-        <button id="x">X</button>
-        <button id="o">O</button>
+        <div class="tokenLabels">
+            <button class="token" id="x">X</button>
+            <label for="x">hlu</label>
+        </div>
+        <div class="tokenLabels">
+            <button class="token" id="o">O</button>
+            <label for="o">hlu</label>
+        </div>
     </div>
     <div id="gameBoard">
-        <div class="gameCells nots"></div>
-        <div class="gameCells"></div>
-        <div class="gameCells"></div>
-        <div class="gameCells"></div>
-        <div class="gameCells"></div>
-        <div class="gameCells"></div>
-        <div class="gameCells cross"></div>
-        <div class="gameCells"></div>
-        <div class="gameCells"></div>
+        <div class="gameCells" id="11"></div>
+        <div class="gameCells" id="12"></div>
+        <div class="gameCells" id="13"></div>
+        <div class="gameCells" id="21"></div>
+        <div class="gameCe11s" id="22"></div>
+        <div class="gameCells" id="23"></div>
+        <div class="gameCells" id="31"></div>
+        <div class="gameCells" id="32"></div>
+        <div class="gameCells" id="33"></div>
 
     </div>
+    <div>
+        <button>RESTART</button>
+    </div>
+    <div id="winner">RESULTS!!</div>
     
 </body>
 </html>
