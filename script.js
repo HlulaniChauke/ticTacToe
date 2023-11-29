@@ -1,9 +1,15 @@
 const displayController = {
+    tokenSelection: function(){
 
-    //the actuall board
-    //the tokens
-    //the result
-    //play/restart game
+    },
+    
+    gameStart: function(){
+
+    },
+    
+    displayWinner: function(){
+
+    },
     displayToken: function(token, {a,b}){
         
 
@@ -23,8 +29,25 @@ const gameBoard ={
     
 
     threeInARowCheck : function(){
-
+            for (let i = 0; i < this.board.length; i++) {
+                if (this.board[i][0] === token && this.board[i][1] === token && this.board[i][2] === token) {
+                    return true;
+                }
+            }
+            for (let j = 0; j < this.board[0].length; j++) {
+                if (this.board[0][j] === token && this.board[1][j] === token && this.board[2][j] === token) {
+                    return true;
+                }
+            }
+            if (this.board[0][0] === token && this.board[1][1] === token && this.board[2][2] === token) {
+                return true;
+            }
+            if (this.board[0][2] === token && this.board[1][1] === token && this.board[2][0] === token) {
+                return true;
+            }
+            return false;
     },
+
     collision : function(location){
         if (this.board[a][b] === "")
         return false;
