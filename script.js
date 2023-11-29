@@ -1,15 +1,39 @@
 const displayController = {
+
     //the actuall board
     //the tokens
     //the result
     //play/restart game
+    displayToken: function(token, {a,b}){
+        
+
+    }
 }
 
 const gameBoard ={
-    //choose token
-    //generateMoves
-    //noMoves
-    //collision
+    boardSize: 3,
+    movesMade: 0,
+    board : [["","",""],["","",""],["","",""]],
+
+    tokenPlacements : function(token, location){
+        let {a,b} = location;
+        this.board[a][b] = token;
+        displayToken(token, {a,b})
+    },
+
+    threeInARowCheck : function(){
+
+    },
+    collision : function(){
+
+    },
+
+    generateLocationAI: function(){
+        let row = Math.floor(Math.random*this.boardSize);
+        let col = Math.floor(Math.random*this.boardSize);
+        
+        return [row,col];
+    }
 }
 
 const players = {
@@ -35,15 +59,26 @@ const players = {
 };
 
 function getName(){
-    return prompt("Enter your name please");
+    // return prompt("Enter your name please");
 }
 
 function getToken(){
-    return prompt("enter your token");
+    // return prompt("Token please?");
 }
 
+// let theToken = ""
+// function getToken(){
+//     const tokenButtons = document.getElementsByClassName("token");
+//     buttons = Array.from(tokenButtons);
+//     buttons.forEach( button => {
+//         button.addEventListener("click", (e) =>{
+//             theToken = e.target.id;
+//          });
+//  console.log(theToken);
+//     });
+//     return theToken;
+// }
+
 window.onload = function(){
-    let myArr = players.infor();
-    console.log(myArr[0].name, myArr[0].token);
-    console.log(myArr[1].name, myArr[1].token);
+    console.log(getToken());
 }
