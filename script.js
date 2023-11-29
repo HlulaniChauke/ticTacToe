@@ -20,6 +20,7 @@ const gameBoard ={
         this.board[a][b] = token;
         displayToken(token, {a,b})
     },
+    
 
     threeInARowCheck : function(){
 
@@ -31,7 +32,6 @@ const gameBoard ={
     generateLocationAI: function(){
         let row = Math.floor(Math.random*this.boardSize);
         let col = Math.floor(Math.random*this.boardSize);
-        
         return [row,col];
     }
 }
