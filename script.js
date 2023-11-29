@@ -25,8 +25,9 @@ const gameBoard ={
     threeInARowCheck : function(){
 
     },
-    collision : function(){
-
+    collision : function(location){
+        if (this.board[a][b] === "")
+        return false;
     },
 
     generateLocationAI: function(){
