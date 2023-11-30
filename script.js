@@ -1,18 +1,17 @@
 const displayController = {
-    tokenSelection: function(){
 
+    displayMessage: function (msg){
+        const msgArea = document.getElementById("messageArea");
+        msgArea.innerHTML = msg;
     },
-    
-    gameStart: function(){
-        //reset everything
-    },
-    
-    displayMessage: function(){
 
-    },
-    displayToken: function(token, {a,b}){
-        
-
+    displayToken: function(token, location){
+        const theDivWithToken = document.getElementById(location); 
+        if (token === "x"){
+            theDivWithToken.classList.add("cross");
+        }else{
+            theDivWithToken.classList.add("nots");
+        }
     }
 }
 
@@ -30,7 +29,7 @@ const gameBoard ={
     },
     
 
-    threeInARowCheck : function(){
+    threeInARowCheck : function(token){
             for (let i = 0; i < this.board.length; i++) {
                 if (this.board[i][0] === token && this.board[i][1] === token && this.board[i][2] === token) {
                     return true;
@@ -59,51 +58,49 @@ const gameBoard ={
         let row = Math.floor(Math.random*this.boardSize);
         let col = Math.floor(Math.random*this.boardSize);
         return [row,col];
+    },
+
+    gameStart: function(){
+       this.movesMade = 0,
+        this.gameOver =false,
+        this.winner = "",
+        this.board = [["","",""],["","",""],["","",""]],
     }
 }
 
 const players = {
 
+    tokenSelection: function(){
+        const tokenButtons = document.getElementsByClassName("token");
+        buttons = Array.from(tokenButtons);
+        buttons.forEach(element => {
+            element.addEventListener("click", (e) =>{
+                let token = element.id;
+                const nameLabel = document.querySelector(`label[for="${token}"]`);
+                nameLabel.textContent = prompt("Whats your name?");
+                if (token === "x") {
+                    const nameLabel2 = document.querySelector(`label[for="o"]`);
+                    nameLabel2.textContent = "Computer";
+                }else{
+                    const nameLabel2 = document.querySelector(`label[for="x"]`);
+                    nameLabel2.t = "Computer";
+                }
+            }
+            );
+        });
+    },
+    
     infor : function(){
         function Player (name, token){
             this.name = name;
             this.token = token;
         }
         
-        let name = getName();
-        let token = getToken();
-        let player1 = new Player(name, token);
-        if (token === "X"){
-            player2 = new Player("AI", "O");
-        }else{
-            player2 = new Player("AI", "X");
-        }
-        let arr = [player1, player2];
-       return arr;
+        const player1Name = document.querySelector(`label[for="x"]`);
+
     }
 
 };
-
-function getName(){
-    // return prompt("Enter your name please");
-}
-
-function getToken(){
-    // return prompt("Token please?");
-}
-
-// let theToken = ""
-// function getToken(){
-//     const tokenButtons = document.getElementsByClassName("token");
-//     buttons = Array.from(tokenButtons);
-//     buttons.forEach( button => {
-//         button.addEventListener("click", (e) =>{
-//             theToken = e.target.id;
-//          });
-//  console.log(theToken);
-//     });
-//     return theToken;
-// }
 
 window.onload = function(){
     console.log(getToken());
