@@ -70,35 +70,42 @@ const gameBoard ={
 
 const players = {
 
+    player1 : {}, 
+    player2 : {}, 
+
     tokenSelection: function(){
-        const tokenButtons = document.getElementsByClassName("token");
-        buttons = Array.from(tokenButtons);
-        buttons.forEach(element => {
-            element.addEventListener("click", (e) =>{
-                let token = element.id;
-                const nameLabel = document.querySelector(`label[for="${token}"]`);
-                nameLabel.textContent = prompt("Whats your name?");
-                if (token === "x") {
-                    const nameLabel2 = document.querySelector(`label[for="o"]`);
-                    nameLabel2.textContent = "Computer";
-                }else{
-                    const nameLabel2 = document.querySelector(`label[for="x"]`);
-                    nameLabel2.t = "Computer";
-                }
-            }
-            );
-        });
-    },
-    
-    infor : function(){
         function Player (name, token){
             this.name = name;
             this.token = token;
         }
-        
-        const player1Name = document.querySelector(`label[for="x"]`);
 
-    }
+        const tokenButtons = document.getElementsByClassName("token");
+        let buttons = Array.from(tokenButtons);
+
+        buttons.forEach(element => {
+            element.addEventListener("click", (e) =>{
+                let token = element.id;
+                const nameLabel = document.querySelector(`label[for="${token}"]`);
+                let theName = prompt("Whats your name?");
+                this.player1 = new Player (theName, token);
+                nameLabel.textContent = theName;
+            
+                
+                if (token === "x") {
+                    const nameLabel2 = document.querySelector(`label[for="o"]`);  
+                    nameLabel2.textContent = "Computer";
+                    this.player2 = new Player("Computer", "o");
+                }else{
+                    const nameLabel2 = document.querySelector(`label[for="x"]`);
+                    this.player2 = new Player("Computer", "x");
+                    
+                } 
+                console.log(players.player1.name+ " with token "+players.player1.token );
+                console.log(players.player2.name+ " with token "+players.player2.token);
+            }
+            );
+        });
+    },
 
 };
 
