@@ -1,5 +1,18 @@
 const displayController = {
 
+    displayPlayers: function(){
+        const labelX = document.querySelector(`label[for="x"]`);
+        const labelO = document.querySelector(`label[for="o"]`);
+
+        if (players.player1.token === "x"){
+            labelX.textContent = players.player1.name;
+            labelO.textContent = players.player2.name;
+        }else{
+            labelX.textContent = players.player2.name;
+            labelO.textContent = players.player1.name;
+        }
+    },
+
     displayMessage: function (msg){
         const msgArea = document.getElementById("messageArea");
         msgArea.innerHTML = msg;
@@ -25,7 +38,50 @@ const gameBoard ={
     tokenPlacements : function(token, location){
         let {a,b} = location;
         this.board[a][b] = token;
-        displayToken(token, {a,b})
+        displayToken(token, {a,b});
+        this.movesMade++;
+        // check 3 in a row
+        //check moves
+        if (this.threeInARowCheck(token)){
+            if(players.player1.token === token){
+                this.winner = players.player1.name;
+                displayMessage(this.winner);
+            }else{
+                this.winner = players.player2.name;
+                displayMessage(this.winner);
+            }
+        }else if ( this.movesMade === 9){
+            displayMessage("It`s a tie");
+        }
+    },
+
+    getPlayer1move: function () {
+        return new Promise((resolve) => {
+            const cells = document.getElementsByClassName("gameCells");
+            const cellArray = Array.from(cells);
+
+            const clickHandler = (e) => {
+                const location = e.target.id;
+                cellArray.forEach((element) => {
+                    element.removeEventListener("click", clickHandler);
+                });
+                resolve(location);
+            };
+
+            cellArray.forEach((element) => {
+                element.addEventListener("click", clickHandler);
+            });
+        });
+    },
+
+
+    getPlayer2move : function(){
+       let location;
+        do {
+            location = generateLocationAI();
+        }while(this.collision(location)=== true);
+
+        return location;
     },
     
 
@@ -50,21 +106,23 @@ const gameBoard ={
     },
 
     collision : function(location){
+        let [a,b]=location;
         if (this.board[a][b] === "")
         return false;
     },
 
     generateLocationAI: function(){
-        let row = Math.floor(Math.random*this.boardSize);
-        let col = Math.floor(Math.random*this.boardSize);
-        return [row,col];
+        let row = Math.floor(Math.random()*this.boardSize);
+        let col = Math.floor(Math.random()*this.boardSize);
+        let location = [row,col]
+        return location;
     },
 
     gameStart: function(){
-       this.movesMade = 0,
-        this.gameOver =false,
-        this.winner = "",
-        this.board = [["","",""],["","",""],["","",""]],
+       this.movesMade = 0;
+        this.gameOver =false;
+        this.winner = "";
+        this.board = [["","",""],["","",""],["","",""]];
     }
 }
 
@@ -74,6 +132,8 @@ const players = {
     player2 : {}, 
 
     tokenSelection: function(){
+        return new Promise((resolve) => {
+        
         function Player (name, token){
             this.name = name;
             this.token = token;
@@ -82,33 +142,30 @@ const players = {
         const tokenButtons = document.getElementsByClassName("token");
         let buttons = Array.from(tokenButtons);
 
+        const tokenSelectionhandler = (e) => {
+            let token = e.target.id;
+            let theName = prompt("Whats your name?");
+            this.player1 = new Player (theName, token);
+            if (token === "x") {
+                this.player2 = new Player("Computer", "o");
+            }else{
+                this.player2 = new Player("Computer", "x"); 
+            };
+            resolve();
+
+        };
+    
         buttons.forEach(element => {
-            element.addEventListener("click", (e) =>{
-                let token = element.id;
-                const nameLabel = document.querySelector(`label[for="${token}"]`);
-                let theName = prompt("Whats your name?");
-                this.player1 = new Player (theName, token);
-                nameLabel.textContent = theName;
-            
-                
-                if (token === "x") {
-                    const nameLabel2 = document.querySelector(`label[for="o"]`);  
-                    nameLabel2.textContent = "Computer";
-                    this.player2 = new Player("Computer", "o");
-                }else{
-                    const nameLabel2 = document.querySelector(`label[for="x"]`);
-                    this.player2 = new Player("Computer", "x");
-                    
-                } 
-                console.log(players.player1.name+ " with token "+players.player1.token );
-                console.log(players.player2.name+ " with token "+players.player2.token);
-            }
-            );
+            element.addEventListener("click", tokenSelectionhandler);});
         });
-    },
+    }
 
 };
 
 window.onload = function(){
-    console.log(getToken());
-}
+
+    players.tokenSelection().then(() => {
+        displayController.displayPlayers();
+    });
+    }
+    
