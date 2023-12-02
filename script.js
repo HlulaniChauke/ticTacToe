@@ -34,24 +34,46 @@ const gameBoard ={
     gameOver: false,
     winner: "",
     board : [["","",""],["","",""],["","",""]],
+    location1 : "",
+    location2 : "",
 
     tokenPlacements : function(token, location){
-        let {a,b} = location;
+        displayController.displayToken(token,location );
+        location = location.split("");
+        let a = location[0];
+        let b = location[1];
         this.board[a][b] = token;
-        displayToken(token, {a,b});
         this.movesMade++;
         // check 3 in a row
         //check moves
         if (this.threeInARowCheck(token)){
             if(players.player1.token === token){
                 this.winner = players.player1.name;
-                displayMessage(this.winner);
+                displayController.displayMessage(this.winner+ " is the winner");
             }else{
                 this.winner = players.player2.name;
-                displayMessage(this.winner);
+                displayController.displayMessage(this.winner+ " is the winner");
             }
         }else if ( this.movesMade === 9){
-            displayMessage("It`s a tie");
+            displayController.displayMessage("It`s a tie");
+        }
+    },
+
+   playTurn : function () {
+        if (this.movesMade < this.boardSize * this.boardSize) {
+            if (players.player1.token === "x") {
+                this.getPlayer1move().then((location) => {
+                    this.tokenPlacements(players.player1.token, location);
+                    this.tokenPlacements(players.player2.token,this.getPlayer2move());
+                    this.playTurn(); // Call next turn
+                });
+            } else {
+                this.tokenPlacements(players.player2.token, this.getPlayer2move());
+                this.getPlayer1move().then((location) => {
+                    this.tokenPlacements(players.player1.token, location);
+                    this.playTurn(); 
+                });// Call next turn
+            }
         }
     },
 
@@ -78,7 +100,7 @@ const gameBoard ={
     getPlayer2move : function(){
        let location;
         do {
-            location = generateLocationAI();
+            location = this.generateLocationAI();
         }while(this.collision(location)=== true);
 
         return location;
@@ -108,13 +130,14 @@ const gameBoard ={
     collision : function(location){
         let [a,b]=location;
         if (this.board[a][b] === "")
-        return false;
+        {return false;}
+        return true
     },
 
     generateLocationAI: function(){
         let row = Math.floor(Math.random()*this.boardSize);
         let col = Math.floor(Math.random()*this.boardSize);
-        let location = [row,col]
+        let location = row +""+col;
         return location;
     },
 
@@ -163,9 +186,10 @@ const players = {
 };
 
 window.onload = function(){
-
+    gameBoard.gameStart();
     players.tokenSelection().then(() => {
         displayController.displayPlayers();
+        gameBoard.playTurn();
     });
     }
     
