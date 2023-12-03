@@ -16,6 +16,7 @@ const displayController = {
     displayMessage: function (msg){
         const msgArea = document.getElementById("messageArea");
         msgArea.innerHTML = msg;
+        gameBoard.gameOver = true
     },
 
     displayToken: function(token, location){
@@ -50,17 +51,17 @@ const gameBoard ={
             if(players.player1.token === token){
                 this.winner = players.player1.name;
                 displayController.displayMessage(this.winner+ " is the winner");
-            }else{
+            }else if(players.player2.token === token){
                 this.winner = players.player2.name;
                 displayController.displayMessage(this.winner+ " is the winner");
-            }
-        }else if ( this.movesMade === 9){
+            } else if ( this.movesMade === 9){
             displayController.displayMessage("It`s a tie");
-        }
+            }
+        };
     },
 
    playTurn : function () {
-        if (this.movesMade < this.boardSize * this.boardSize) {
+        if (this.movesMade < this.boardSize * this.boardSize && !this.gameOver) {
             if (players.player1.token === "x") {
                 this.getPlayer1move().then((location) => {
                     this.tokenPlacements(players.player1.token, location);
@@ -69,12 +70,14 @@ const gameBoard ={
                 });
             } else {
                 this.tokenPlacements(players.player2.token, this.getPlayer2move());
-                this.getPlayer1move().then((location) => {
-                    this.tokenPlacements(players.player1.token, location);
-                    this.playTurn(); 
-                });// Call next turn
-            }
-        }
+                if(!this.gameOver){
+                    this.getPlayer1move().then((location) => {
+                        this.tokenPlacements(players.player1.token, location);
+                        this.playTurn(); 
+                    });   
+                }
+            };
+        };
     },
 
     getPlayer1move: function () {
@@ -146,6 +149,13 @@ const gameBoard ={
         this.gameOver =false;
         this.winner = "";
         this.board = [["","",""],["","",""],["","",""]];
+    },
+
+    gameRestart: function(){
+        const restart = document.getElementById("restart");
+        restart.addEventListener("click", (e) =>{
+            location.reload();
+        });
     }
 }
 
@@ -190,6 +200,7 @@ window.onload = function(){
     players.tokenSelection().then(() => {
         displayController.displayPlayers();
         gameBoard.playTurn();
+        gameBoard.gameRestart();
     });
     }
     
